@@ -1,0 +1,26 @@
+<div class="home-container">
+  <header class="header">
+    <h2>Welcome, {{ username }}</h2>
+    <button class="logout-btn" (click)="onLogout()">Logout</button>
+  </header>
+
+  <main class="main-content">
+    <!-- Item List Section -->
+    <section class="item-list-section">
+      <h3 class="section-title">Items</h3>
+      <app-item-list></app-item-list>
+    </section>
+
+    <!-- Purchase Section -->
+    <section class="purchase-section">
+      <h3 class="section-title">Purchase</h3>
+      <app-purchase></app-purchase>
+    </section>
+
+    <!-- Sales Section -->
+    <section class="sales-section">
+      <h3 class="section-title">Sales</h3>
+      <app-sale></app-sale>
+    </section>
+  </main>
+</div>

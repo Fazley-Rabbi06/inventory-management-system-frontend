@@ -1,0 +1,61 @@
+<!-- Toggle Button for Item List -->
+<button class="item-toggle-btn" (click)="toggleItemList()">
+  {{ isItemListVisible ? 'Collapse Item List' : 'Show Item List' }}
+</button>
+
+<!-- Form to add a new item, visible only when the item list is visible -->
+<div *ngIf="isItemListVisible">
+  <input type="text" [(ngModel)]="newItem.name" placeholder="Item Name" />
+  <input type="number" [(ngModel)]="newItem.stockQuantity" placeholder="Stock Quantity" />
+  <button (click)="addItem()">Add Item</button>
+</div>
+
+<!-- Table to display the list of items, visible only when the item list is visible -->
+<div *ngIf="isItemListVisible">
+  <table *ngIf="items.length > 0">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Stock Quantity</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <ng-container *ngIf="isEditingId === item.id; else viewMode">
+          <!-- Edit Mode -->
+          <td><input [(ngModel)]="item.name" /></td>
+          <td><input type="number" [(ngModel)]="item.stockQuantity" /></td>
+          <td>
+            <button (click)="updateItem(item)">Save</button>
+            <button (click)="isEditingId = null">Cancel</button>
+          </td>
+        </ng-container>
+
+        <ng-template #viewMode>
+          <!-- View Mode -->
+          <td>{{ item.name }}</td>
+          <td>{{ item.stockQuantity }}</td>
+          <td>
+            <button (click)="enableEdit(item)">Edit</button>
+            <button (click)="deleteItem(item.id)">Delete</button>
+          </td>
+        </ng-template>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="items.length === 0">No items available.</p>
+
+</div>
+
+<!-- Stock Report Section -->
+<div class="stock-report-container">
+  <button (click)="toggleStockReport()" class="generate-report-button">
+    {{ isStockReportVisible ? 'Collapse Stock Report' : 'Generate Stock Report' }}
+  </button>
+</div>
+
+<div *ngIf="isStockReportVisible" class="stock-report">
+  <div [innerHTML]="stockReport"></div>
+</div>

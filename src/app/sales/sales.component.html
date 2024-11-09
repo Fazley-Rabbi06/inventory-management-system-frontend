@@ -1,0 +1,74 @@
+<!-- Sale Section Toggle Button -->
+<button class="sale-toggle-btn" (click)="toggleSaleSection()">
+  {{ isSaleSectionVisible ? 'Collapse Sale Section' : 'Create Sale' }}
+</button>
+
+<!-- Sale Section Form -->
+<div *ngIf="isSaleSectionVisible" class="sale-form-container">
+  <h2>{{ isEditingId ? 'Edit Sale' : 'Create Sale' }}</h2>
+  <form (ngSubmit)="isEditingId ? updateSale() : createSale()" class="sale-form">
+    <div class="form-row">
+      <label for="item" class="form-label">Item:</label>
+      <select [(ngModel)]="newSale.itemId" name="item" required class="form-input">
+        <option *ngFor="let item of items" [value]="item.id">
+          {{ item.name }}
+        </option>
+      </select>
+    </div>
+  
+    <div class="form-row">
+      <label for="quantity" class="form-label">Quantity:</label>
+      <input type="number" [(ngModel)]="newSale.quantity" name="quantity" required class="form-input" placeholder="Sale quantity"/>
+    </div>
+  
+    <div class="form-action">
+      <button type="submit" class="submit-btn">
+        {{ isEditingId ? 'Update Sale' : 'Submit Sale' }}
+      </button>
+    </div>
+  </form>  
+
+  <div>
+    <br>
+    <table *ngIf="sales.length > 0" class="sale-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Quantity</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sale of sales">
+          <ng-container *ngIf="isEditingId === sale.id; else viewMode">
+            <!-- Edit Mode -->
+            <td>
+              <select [(ngModel)]="newSale.itemId" name="item" required class="form-input">
+                <option *ngFor="let item of items" [value]="item.id">
+                  {{ item.name }}
+                </option>
+              </select>
+            </td>
+            <td><input type="number" [(ngModel)]="newSale.quantity" class="form-input" /></td>
+            <td>
+              <button (click)="updateSale()" class="save-btn">Save</button>
+              <button (click)="isEditingId = null" class="cancel-btn">Cancel</button>
+            </td>
+          </ng-container>
+
+          <ng-template #viewMode>
+            <!-- View Mode -->
+            <td>{{ sale.itemName }}</td>
+            <td>{{ sale.quantity }}</td>
+            <td>
+              <button (click)="enableEdit(sale)" class="edit-btn">Edit</button>
+              <button (click)="deleteSale(sale.id)" class="delete-btn">Delete</button>
+            </td>
+          </ng-template>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="sales.length === 0" class="no-sales-message">No sales made yet.</p>
+  </div>
+</div>
